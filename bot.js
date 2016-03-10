@@ -32,6 +32,12 @@ function postMessage() {
   body = {
     "bot_id" : botID,
     "text" : "fuck you louis"
+	  "attachments" : [
+    {
+      "type"  : "image",
+      "url"   : "https://i.groupme.com/1392x1500.jpeg.1b08f3b00ac64f75ab6050e95aa28e5c.large"
+    }
+  ]
 
   };
 
