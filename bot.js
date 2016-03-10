@@ -34,7 +34,7 @@ function postMessage() {
     "text" : botResponse
   };
 
-  console.log('sending ' + botResponse + ' to ' + botID);
+  console.log('sending ' + "fuck you louis" + ' to ' + botID);
 
   botReq = HTTPS.request(options, function(res) {
       if(res.statusCode == 202) {
