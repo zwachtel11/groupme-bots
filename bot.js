@@ -18,10 +18,44 @@ function respond() {
   }
 }
 
+function heyheyhey() {
+	var http = require('http');
+
+		//The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
+	var options = {
+		host: 'www.espn.go.com',
+		path: '/nba/bottomline/scores'
+};
+
+	callback = function(response) {
+			var str = '';
+
+  //another chunk of data has been recieved, so append it to `str`
+	response.on('data', function (chunk) {
+		str += chunk;
+		});
+
+  //the whole response has been recieved, so we just print it out here
+	response.on('end', function () {
+		return str;
+	});
+}
+
+http.request(options, callback).end();
+
+
+
+
+}
+
+
+
 function postMessage() {
   var botResponse, options, body, botReq;
 
-  botResponse = cool();
+  botResponse = heyheyhey();
+  var hey = botResponse.split("%20");
+  
 
   options = {
     hostname: 'api.groupme.com',
@@ -31,13 +65,7 @@ function postMessage() {
 
   body = {
     "bot_id" : botID,
-    "text" : "fuck you louis"
-	  "attachments" : [
-    {
-      "type"  : "image",
-      "url"   : "https://i.groupme.com/1392x1500.jpeg.1b08f3b00ac64f75ab6050e95aa28e5c.large"
-    }
-  ]
+  "text" : "The Land: " + hey[1] + "\n Dubs: " + hey[4]
 
   };
 
