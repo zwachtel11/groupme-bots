@@ -1,5 +1,6 @@
 var HTTPS = require('https');
 var cool = require('cool-ascii-faces');
+var request = require('request');
 
 var botID = process.env.BOT_ID;
 
@@ -20,9 +21,11 @@ function respond() {
 
 
 function postMessage() {
-  var botResponse, options, body, botReq;
-
-  botResponse = null;
+  var botResponse, options, body, botReq, yoo;
+	
+	yoo = request('http://espn.go.com/nfl/bottomline/scores');
+	
+  botResponse = yoo.body;
  // var hey = botResponse.split("%20");
   
 
@@ -34,7 +37,7 @@ function postMessage() {
 
   body = {
     "bot_id" : botID,
-  "text" : "test"
+  "text" : botResponse
 
   };
 
