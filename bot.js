@@ -25,7 +25,7 @@ function postMessage() {
 	
 	yoo = request('http://espn.go.com/nfl/bottomline/scores');
 	
-  botResponse = yoo.body;
+	botResponse = yoo;
  // var hey = botResponse.split("%20");
   
 
