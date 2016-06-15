@@ -24,12 +24,12 @@ function postMessage() {
   var botResponse, options, body, botReq, yoo;
 	
 	
-  request('http://espn.go.com/nfl/bottomline/scores', function (error, response, body) {
+  request('http://espn.go.com/mlb/bottomline/scores', function (error, response, body) {
       if (!error && response.statusCode == 200) {
-          yoo = body; // Show the HTML for the Modulus homepage.
-
+          yoo = body.split("%20"); // Show the HTML for the Modulus homepage.
+		  
   
-	botResponse = yoo;
+	botResponse = yoo[1] + " " + yoo[2]+ " " + yoo[5] + " " + yoo[6];
  // var hey = botResponse.split("%20");
   
 
