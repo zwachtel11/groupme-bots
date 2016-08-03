@@ -58,6 +58,10 @@ function searchGiphy(giphyToSearch) {
   HTTP.request(options, callback).end();
 }
 
+function encodeQuery(query) {
+  return query.replace(/\s/g, '+');;
+}
+
 
 function postMessage() {
   var botResponse, options, body, botReq, yoo;
