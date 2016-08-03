@@ -1,13 +1,16 @@
 var HTTPS = require('https');
+var HTTP = require('http');
 var cool = require('cool-ascii-faces');
 var request = require('request');
 
 var botID = process.env.BOT_ID;
+var apiKey = process.env.API_KEY;
 
 function respond() {
   var request = JSON.parse(this.req.chunks[0]),
       botRegex = /^\/sports guy$/;
 	  botRegex1 = /^\/weather$/;
+    giphyCommand = /^\/giphy$/
 
   if(request.text && botRegex.test(request.text)) {
     this.res.writeHead(200);
@@ -17,26 +20,57 @@ function respond() {
 	      this.res.writeHead(200);
 	      postMessage1();
 	      this.res.end();
-	}else{	  
+	}else if (request.text && giphyCommand.test(request.text)) {
+    this.res.writeHead(200);
+    searchGiphy(request.text.substring(giphyCommand.length + 1));
+    this.res.end();
+  }else{
     console.log("don't care");
     this.res.writeHead(200);
     this.res.end();
   }
 }
 
+function searchGiphy(giphyToSearch) {
+  var options = {
+    host: 'api.giphy.com',
+    path: '/v1/gifs/search?q=' + encodeQuery(giphyToSearch) + '&api_key=' + apiKey
+  };
+
+  var callback = function(response) {
+    var str = '';
+
+    response.on('data', function(chunck){
+      str += chunck;
+    });
+
+    response.on('end', function() {
+      if (!(str && JSON.parse(str).data[0])) {
+        postMessage('Couldn\'t find a gif 💩');
+      } else {
+        var id = JSON.parse(str).data[0].id;
+        var giphyURL = 'http://i.giphy.com/' + id + '.gif';
+        postMessage(giphyURL);
+      }
+    });
+  };
+
+  HTTP.request(options, callback).end();
+}
+
 
 function postMessage() {
   var botResponse, options, body, botReq, yoo;
-	
-	
+
+
   request('http://espn.go.com/mlb/bottomline/scores', function (error, response, body) {
       if (!error && response.statusCode == 200) {
           yoo = body.split("%20"); // Show the HTML for the Modulus homepage.
-		  
-  
-	botResponse = yoo[1] + " " + yoo[2]+ " " + yoo[5] + " " + yoo[6];
+
+
+	botResponse = "Golden " + yoo[1]+ " " + yoo[5] + " " + yoo[6];
  // var hey = botResponse.split("%20");
-  
+
 
   options = {
     hostname: 'api.groupme.com',
@@ -67,24 +101,24 @@ function postMessage() {
     console.log('timeout posting message '  + JSON.stringify(err));
   });
   botReq.end(JSON.stringify(body));
-  
+
     }
 });
 }
 function postMessage1() {
   var botResponse, options, body, botReq, yoo;
-	
-	
+
+
   request('http://api.openweathermap.org/data/2.5/weather?q=NewYork&appid=1060eaf4c622581951b7ed6e3784b6fa', function (error, response, body) {
       if (!error && response.statusCode == 200) {
   		var hey = JSON.parse(body);
-  		var yo = parseFloat(hey.main.temp); 
+  		var yo = parseFloat(hey.main.temp);
   		var temp = yo * (9/5) - 459.67;
-		var descript = hey.weather[0].description;  
-  
+		var descript = hey.weather[0].description;
+
 		botResponse = "Temp: " + temp + " type: " + descript;
  // var hey = botResponse.split("%20");
-  
+
 
   options = {
     hostname: 'api.groupme.com',
@@ -115,7 +149,7 @@ function postMessage1() {
     console.log('timeout posting message '  + JSON.stringify(err));
   });
   botReq.end(JSON.stringify(body));
-  
+
     }
 });
 
