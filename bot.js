@@ -48,11 +48,11 @@ function searchGiphy(giphyToSearch) {
 
     response.on('end', function() {
       if (!(str && JSON.parse(str).data[0])) {
-        postMessage('Couldn\'t find a gif 💩');
+        postMessage2('Couldn\'t find a gif 💩');
       } else {
         var id = JSON.parse(str).data[0].id;
         var giphyURL = 'http://i.giphy.com/' + id + '.gif';
-        postMessage(giphyURL);
+        postMessage2(giphyURL);
       }
     });
   };
@@ -145,6 +145,32 @@ function postMessage1() {
         //neat
       } else {
         console.log('rejecting bad status code ' + res.statusCode);
+      }
+  });
+
+  function postMessage2(message) {
+  var botResponse, options, body, botReq;
+
+  botResponse = message;
+
+  options = {
+    hostname: 'api.groupme.com',
+    path: '/v3/bots/post',
+    method: 'POST'
+  };
+
+  body = {
+    "bot_id" : botID,
+    "text" : botResponse
+  };
+
+  console.log('sending ' + botResponse + ' to ' + botID);
+
+  botReq = HTTPS.request(options, function(res) {
+      if(res.statusCode == 202) {
+        console.log('202 response');
+      } else {
+        console.log('rejecting bad status code from groupme:' + res.statusCode);
       }
   });
 
