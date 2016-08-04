@@ -10,7 +10,7 @@ function respond() {
   var request = JSON.parse(this.req.chunks[0]),
       botRegex = /^\/sports guy$/;
 	  botRegex1 = /^\/weather$/;
-    giphyCommand = /^\/giphy$/
+    giphyCommand = '/giphy';
 
   if(request.text && botRegex.test(request.text)) {
     this.res.writeHead(200);
@@ -20,7 +20,9 @@ function respond() {
 	      this.res.writeHead(200);
 	      postMessage1();
 	      this.res.end();
-	}else if (request.text && giphyCommand.test(request.text)) {
+	}else if (request.text &&
+     request.text.length > giphyCommand.length &&
+     request.text.substring(0, giphyCommand.length) === giphyCommand) {
     this.res.writeHead(200);
     searchGiphy(request.text.substring(giphyCommand.length + 1));
     this.res.end();
